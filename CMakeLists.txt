@@ -24,11 +24,11 @@ option(BUILD_LIB_GLM "Build with GLM." ON)
 
 
 if(BUILD_LIB_FREEGLUT)
-    message("Building with FreeGLUT")
-
     # FreeGLUT
-    set(FREEGLUT_BUILD_SHARED_LIBS 0)
-    set(FREEGLUT_BUILD_STATIC_LIBS 1)
+    OPTION(FREEGLUT_BUILD_STATIC_LIBS "Build FreeGLUT static library." ON)
+    OPTION(FREEGLUT_BUILD_SHARED_LIBS "Build FreeGLUT shared library." OFF)
+    option(FREEGLUT_BUILD_DEMOS "Build FreeGLUT demos." OFF)
+    
     add_subdirectory(lib/freeglut)
     if (UNIX OR MINGW)
         target_compile_options(freeglut_static PRIVATE "-Wno-all")      # Remove annoying font unused values (in CMakeList line 305)
@@ -40,8 +40,6 @@ if(BUILD_LIB_FREEGLUT)
 endif()
 
 if(BUILD_LIB_GLUI)
-    message("Building with GLUI")
-
     add_subdirectory(lib/glui)
     list(APPEND INCLUDE_DIRS $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/lib/glui/include>)
     list(APPEND INCLUDE_LIBS glui)
@@ -49,8 +47,6 @@ if(BUILD_LIB_GLUI)
 endif()
 
 if(BUILD_LIB_GLM)
-    message("Building with GLM")
-
     add_subdirectory(lib/glm)
     list(APPEND INCLUDE_DIRS $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/lib/glm/glm>)
     list(APPEND INCLUDE_LIBS glm)
@@ -61,7 +57,14 @@ endif()
 find_package(OpenGL REQUIRED)
 
 
-add_executable(${PROJECT_NAME} WIN32 MACOSX_BUNDLE ${COMPILE_FILES})
+if(WIN32)
+    set(BUILD_OPTIONS WIN32)
+elseif(UNIX AND APPLE)
+    set(BUILD_OPTIONS MACOSX_BUNDLE)
+endif()
+
+
+add_executable(${PROJECT_NAME} ${BUILD_OPTIONS} ${COMPILE_FILES})
 target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} ${INCLUDE_LIBS})
 target_include_directories(${PROJECT_NAME} PUBLIC ${INCLUDE_DIRS})
 
