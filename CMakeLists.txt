@@ -1,3 +1,25 @@
+# MIT License
+
+# Copyright (c) 2021 jcastro0x
+
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
 cmake_minimum_required(VERSION 3.17)
 project(GLUTBase)
 
@@ -24,7 +46,6 @@ option(BUILD_LIB_GLM "Build with GLM." ON)
 
 
 if(BUILD_LIB_FREEGLUT)
-    # FreeGLUT
     OPTION(FREEGLUT_BUILD_STATIC_LIBS "Build FreeGLUT static library." ON)
     OPTION(FREEGLUT_BUILD_SHARED_LIBS "Build FreeGLUT shared library." OFF)
     option(FREEGLUT_BUILD_DEMOS "Build FreeGLUT demos." OFF)
@@ -36,21 +57,21 @@ if(BUILD_LIB_FREEGLUT)
     endif ()
     list(APPEND INCLUDE_DIRS $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/lib/freeglut/include>)
     list(APPEND INCLUDE_LIBS freeglut_static)
-    add_compile_options(-DBUILD_LIB_FREEGLUT)
+    add_compile_definitions(BUILD_LIB_FREEGLUT)
 endif()
 
 if(BUILD_LIB_GLUI)
     add_subdirectory(lib/glui)
     list(APPEND INCLUDE_DIRS $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/lib/glui/include>)
     list(APPEND INCLUDE_LIBS glui)
-    add_compile_options(-DBUILD_LIB_GLUI)
+    add_compile_definitions(BUILD_LIB_GLUI)
 endif()
 
 if(BUILD_LIB_GLM)
     add_subdirectory(lib/glm)
     list(APPEND INCLUDE_DIRS $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/lib/glm/glm>)
     list(APPEND INCLUDE_LIBS glm)
-    add_compile_options(-DBUILD_LIB_GLM)
+    add_compile_definitions(BUILD_LIB_GLM)
 endif()
 
 # OpenGL
